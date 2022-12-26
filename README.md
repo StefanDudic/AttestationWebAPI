@@ -53,6 +53,7 @@ Skill
 - UpdateSkillAsync() was implemented to allow an update on Name properly for a specified Id. Tasks within the skill can be updated as well, by passing the set of values that need to be updated for specified task Id. If the task Id is not found the Table Storage new task with the passed id is created. In the case that the default guid value is passed for the task id, a new id will automatically be generated.
 - Custom responses for certain scenarios have been implemented to accurately describe the result of a transaction.
 
+## Task
  ### The Task entity contains the following properties: 
  ```
 Task
