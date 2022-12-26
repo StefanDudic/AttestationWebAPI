@@ -3,7 +3,7 @@
 ## The first release of the Web API project
 The first release of the Web API project provides the ability to easily perform CRUD operations for Candidate entities stored in Microsoft Azure Table Storage, following the REST design principles. The project is implemented by following a repository-service pattern and asynchronous methods for storage operations.
 
-##Canidate
+## Canidate
 ### The Candidate entity contains the following properties:
 ```
 Candidate
@@ -29,7 +29,7 @@ Candidate
 - UpdateCandidateAsync() was implemented to allow an update on individual properties, depending on which values have been entered in a form. If the value of the property has not been entered that property won't be updated. As the Candidate model design allows for the "PhoneNumber" property to be empty, passing a value of "000000000" in the updates statement removes the value of the property for the updated entity.
 - Custom responses for certain scenarios have been implemented to accurately describe the result of a transaction.
 
-##Skill
+## Skill
  ### The Skill entity contains the following properties: 
  ```
 Skill
