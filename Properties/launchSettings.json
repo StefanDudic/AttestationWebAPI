@@ -1,0 +1,32 @@
+{
+  "profiles": {
+    "AttestationProject": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=attestationstorage;AccountKey=/u2F0wXiKyNseDVnjRrTJqIDQHzKEKIZtOjnqBKccwHehq0zD9l30C9lPqh1GXow4RgX9cbI+hb++AStIeNdIg==;EndpointSuffix=core.windows.net"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7056;http://localhost:5056"
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  },
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:13141",
+      "sslPort": 44318
+    }
+  }
+}
