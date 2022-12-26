@@ -1,7 +1,7 @@
 # Attestation Web API project
 
 ## The first release of the Web API project
-The first release of the Web API project provides the ability to easily perform CRUD operations for Candidate entities stored in Microsoft Azure Table Storage, following the REST design principles. The project is implemented by following a repository-service pattern and asynchronous methods for storage operations.
+The first release of the Web API project provides the ability to easily perform CRUD operations for Candidate and Skill entities stored in Microsoft Azure Table Storage, following the REST design principles. The project is implemented by following a repository-service pattern and asynchronous methods for storage operations.
 
 ## Canidate
 ### The Candidate entity contains the following properties:
