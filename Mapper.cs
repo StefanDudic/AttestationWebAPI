@@ -165,6 +165,7 @@ namespace AttestationProject
             return skillsList;
         }
 
+        
         #endregion
 
         #region Task
@@ -191,6 +192,26 @@ namespace AttestationProject
             skillRecord.Task = JsonSerializer.Serialize<TaskInformationalModel>(taskInformationalModel);
             return skillRecord;
         }
+
+        public static TaskInformationalModel SkillRecordToTaskInformationalModel(SkillRecord skillRecord)
+        {
+            TaskInformationalModel taskInformationalModel = JsonSerializer.Deserialize<TaskInformationalModel>(skillRecord.Task);
+            return taskInformationalModel;
+        }
+
+        public static async Task<TaskInformationalModel> CreateTaskInformationalModelFromQueryResponse(AsyncPageable<SkillRecord> skills)
+        {
+            SkillRecord skillRecord =new();
+            await foreach (SkillRecord skill in skills)
+            {
+                skillRecord = skill;
+            }
+            TaskInformationalModel taskInformationalModel = null;
+            if(skillRecord.Task != null)
+            taskInformationalModel = JsonSerializer.Deserialize<TaskInformationalModel>(skillRecord.Task);
+            return taskInformationalModel;
+        }
+
 
 
         #endregion

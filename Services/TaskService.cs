@@ -25,6 +25,12 @@ namespace AttestationProject.Services
                 _validatonDictionary.AddError("Level", "Level is required.");
             return _validatonDictionary.IsValid;
         }
+        internal string reverseString(string str)
+        {
+            if (str.Length <= 1) return str;
+            else return reverseString(str.Substring(1)) + str[0];
+        }
+
 
         #endregion
 
@@ -60,6 +66,16 @@ namespace AttestationProject.Services
             await _skillRepository.CreateSkillAsync(skillRecord);
         }
 
+        public async Task<TaskInformationalModel> GetTaskByIdAsync(Guid skillId, Guid taskId)
+        {
+
+            TaskInformationalModel taskInformationalModel = await Mapper.CreateTaskInformationalModelFromQueryResponse(await _repository.GetTaskByIdAsync(skillId.ToString() + "_" + taskId.ToString()));
+            if (taskInformationalModel is null)
+            {
+                throw new HttpRequestException("Task not found.", null, HttpStatusCode.NotFound);
+            }
+            return taskInformationalModel;
+        }
         #endregion
     }
 }

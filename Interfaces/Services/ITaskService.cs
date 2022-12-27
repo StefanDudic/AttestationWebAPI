@@ -3,5 +3,6 @@
     public interface ITaskService
     {
         Task CreateTaskAsync(TaskInformationalModel taskToCreate, SkillName skillName);
+        Task<TaskInformationalModel> GetTaskByIdAsync(Guid skillId, Guid taskId);
     }
 }
