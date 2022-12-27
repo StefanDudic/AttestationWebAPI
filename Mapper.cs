@@ -167,6 +167,32 @@ namespace AttestationProject
 
         #endregion
 
+        #region Task
 
+        public static TaskModel CreateTaskModel(TaskInformationalModel taskInformationalModel)
+        {
+            TaskModel taskModel = new();
+            taskModel.Title = taskInformationalModel.Title;
+            taskModel.Level = taskInformationalModel.Level;
+            taskModel.Description = taskInformationalModel.Description;
+            taskModel.Code = taskInformationalModel.Code;
+            return taskModel;
+        }
+
+        public static SkillRecord CreateSkillRecordFromTaskInformationalModel(TaskInformationalModel taskInformationalModel, string skillName, string skillId)
+        {
+            SkillRecord skillRecord = new();
+            skillRecord.PartitionKey = skillName;
+            skillRecord.RowKey = skillId + "_" + Guid.NewGuid();
+            if (taskInformationalModel.Description is null)
+                taskInformationalModel.Description = "";
+            if (taskInformationalModel.Code is null)
+                taskInformationalModel.Code = "";
+            skillRecord.Task = JsonSerializer.Serialize<TaskInformationalModel>(taskInformationalModel);
+            return skillRecord;
+        }
+
+
+        #endregion
     }
 }

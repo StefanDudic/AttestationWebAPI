@@ -83,6 +83,17 @@ namespace AttestationProject.Services
             return skill;
         }
 
+        public async Task<SkillInformationalModel> GetSingleSkillByIdAsync(Guid id)
+        {
+            List<SkillRecord> response = await Mapper.CreateSkillListFromQueryResponse(await _repository.GetSkillByIdAsync(id.ToString()));
+            if (response.Count == 0)
+            {
+                throw new HttpRequestException("Skill not found.", null, HttpStatusCode.NotFound);
+            }
+            SkillInformationalModel skill = Mapper.SkillRecordsToInformationalModel(response);
+            return skill;
+        }
+
         public async Task<SkillInformationalModel> GetSkillByNameAsync(SkillName skillName)
         {
             List<SkillRecord> response = await Mapper.CreateSkillListFromQueryResponse(await _repository.GetSkillByNameAsync(skillName.ToString()));
