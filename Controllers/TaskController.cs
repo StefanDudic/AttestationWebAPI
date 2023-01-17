@@ -98,6 +98,34 @@
             }
 
         }
+
+        [HttpPut("Update Task")]
+        public async Task<IActionResult> UpdateTaskAsync([FromForm] TaskModel taskEntry, Guid skillId)
+        {
+            try
+            {
+                await _service.UpdateTaskAsync(taskEntry, skillId);
+
+                return Ok("Skill successfully updated.");
+            }
+            catch (HttpRequestException ex)
+            {
+                HttpStatusCode statusCode;
+                if (ex.StatusCode.HasValue)
+                {
+                    statusCode = ex.StatusCode.Value;
+                }
+                else
+                {
+                    statusCode = HttpStatusCode.InternalServerError;
+                }
+                return StatusCode((int)statusCode, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
         #endregion
     }
 }
