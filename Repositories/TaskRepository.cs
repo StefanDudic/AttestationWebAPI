@@ -16,5 +16,6 @@
             AsyncPageable<SkillRecord> skillRecords = skillTableClient.QueryAsync<SkillRecord>(x => x.RowKey == id);
             return skillRecords;
         }
+
     }
 }

@@ -70,6 +70,34 @@
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        [HttpGet("Get All Tasks")]
+        public async Task<IActionResult> GetAllSkillsAsync()
+        {
+            try
+            {
+                List<TaskInformationalModel> skills = await _service.GetAllTasksAsync();
+                return Ok(skills);
+            }
+            catch (HttpRequestException ex)
+            {
+                HttpStatusCode statusCode;
+                if (ex.StatusCode.HasValue)
+                {
+                    statusCode = ex.StatusCode.Value;
+                }
+                else
+                {
+                    statusCode = HttpStatusCode.InternalServerError;
+                }
+                return StatusCode((int)statusCode, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
         #endregion
     }
 }

@@ -1,7 +1,4 @@
-﻿using AttestationProject.Models;
-using System.Collections.Generic;
-
-namespace AttestationProject.Services
+﻿namespace AttestationProject.Services
 {
     public class TaskService : ITaskService
     {
@@ -9,7 +6,7 @@ namespace AttestationProject.Services
         private ITaskRepository _repository;
         private ISkillRepository _skillRepository;
 
-        public TaskService (IValidationDictionary validatonDictionary, ITaskRepository repository, ISkillRepository skillRepository)
+        public TaskService(IValidationDictionary validatonDictionary, ITaskRepository repository, ISkillRepository skillRepository)
         {
             _validatonDictionary = validatonDictionary;
             _repository = repository;
@@ -62,19 +59,35 @@ namespace AttestationProject.Services
                 }
             }
             // Creates a record to be added to the Table Storage
-            SkillRecord skillRecord = Mapper.CreateSkillRecordFromTaskInformationalModel(taskToCreate, existCheck[0].PartitionKey, existCheck[0].RowKey.Substring(0, 36)); 
+            SkillRecord skillRecord = Mapper.CreateSkillRecordFromTaskInformationalModel(taskToCreate, existCheck[0].PartitionKey, existCheck[0].RowKey.Substring(0, 36));
             await _skillRepository.CreateSkillAsync(skillRecord);
         }
 
         public async Task<TaskInformationalModel> GetTaskByIdAsync(Guid skillId, Guid taskId)
         {
-
+            // We need to pass aggregated id that would match RowKey value in Table storage in skillId_taskId format
             TaskInformationalModel taskInformationalModel = await Mapper.CreateTaskInformationalModelFromQueryResponse(await _repository.GetTaskByIdAsync(skillId.ToString() + "_" + taskId.ToString()));
+            // Validation if task exists
             if (taskInformationalModel is null)
             {
                 throw new HttpRequestException("Task not found.", null, HttpStatusCode.NotFound);
             }
             return taskInformationalModel;
+        }
+
+        public async Task<List<TaskInformationalModel>> GetAllTasksAsync()
+        {
+            List<TaskInformationalModel> taskInformationalModels = new List<TaskInformationalModel>();
+            List<SkillRecord> response = await Mapper.CreateSkillListFromQueryResponse(await _skillRepository.GetAllSkillsAsync());
+            if (response.Count == 0)
+            {
+                throw new HttpRequestException("Skill not found.", null, HttpStatusCode.NotFound);
+            }
+            foreach(SkillRecord skillRecord in response)
+            {
+                taskInformationalModels.Add(Mapper.CreateTaskInformationalModelFromSkillRecord(skillRecord));
+            }
+            return taskInformationalModels;
         }
         #endregion
     }
