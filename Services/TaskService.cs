@@ -83,11 +83,15 @@ namespace AttestationProject.Services
             List<SkillRecord> response = await Mapper.CreateSkillListFromQueryResponse(await _skillRepository.GetAllSkillsAsync());
             if (response.Count == 0)
             {
-                throw new HttpRequestException("Task not found.", null, HttpStatusCode.NotFound);
+                throw new HttpRequestException("Tasks not found.", null, HttpStatusCode.NotFound);
             }
             foreach (SkillRecord skillRecord in response)
             {
                 taskInformationalModels.Add(Mapper.CreateTaskInformationalModelFromSkillRecord(skillRecord));
+            }
+            if (taskInformationalModels.First() == null)
+            {
+                throw new HttpRequestException("Tasks not found.", null, HttpStatusCode.NotFound);
             }
             return taskInformationalModels;
         }

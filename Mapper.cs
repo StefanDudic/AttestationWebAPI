@@ -89,8 +89,8 @@ namespace AttestationProject
             // Skill can be added without tasks, following condition checks that, and adjusts the assignment of Tasks property
             if (skillInformationalModel.Tasks == null || skillInformationalModel.Tasks.Count == 0)
                 skillModel.Tasks = null;
-            else 
-            skillModel.Tasks = skillInformationalModel.Tasks.ToList<TaskInformationalModel>();
+            else
+                skillModel.Tasks = skillInformationalModel.Tasks.ToList<TaskInformationalModel>();
             return skillModel;
         }
 
@@ -105,7 +105,7 @@ namespace AttestationProject
             }
             skillModel.Name = skillName;
             skillModel.Tasks = new List<TaskInformationalModel>();
-            if (skillRecord.Task is not null) 
+            if (skillRecord.Task is not null)
             {
                 skillModel.Tasks.Add(JsonSerializer.Deserialize<TaskInformationalModel>(skillRecord.Task));
             }
@@ -165,7 +165,7 @@ namespace AttestationProject
             return skillsList;
         }
 
-        
+
         #endregion
 
         #region Task
@@ -187,21 +187,22 @@ namespace AttestationProject
         // Returns a single task entity from the query response
         public static async Task<TaskInformationalModel> CreateTaskInformationalModelFromQueryResponse(AsyncPageable<SkillRecord> skills)
         {
-            SkillRecord skillRecord =new();
+            SkillRecord skillRecord = new();
             await foreach (SkillRecord skill in skills)
             {
                 skillRecord = skill;
             }
             // Setting a value to be returned as null if response contains no elements
             TaskInformationalModel taskInformationalModel = null;
-            if(skillRecord.Task != null)
-            taskInformationalModel = JsonSerializer.Deserialize<TaskInformationalModel>(skillRecord.Task);
+            if (skillRecord.Task != null)
+                taskInformationalModel = JsonSerializer.Deserialize<TaskInformationalModel>(skillRecord.Task);
             return taskInformationalModel;
         }
-        public static TaskInformationalModel CreateTaskInformationalModelFromSkillRecord (SkillRecord skillRecord)
+        public static TaskInformationalModel CreateTaskInformationalModelFromSkillRecord(SkillRecord skillRecord)
         {
             TaskInformationalModel taskInformationalModel = null;
-            taskInformationalModel = JsonSerializer.Deserialize<TaskInformationalModel>(skillRecord.Task);
+            if (skillRecord.Task != null)
+                taskInformationalModel = JsonSerializer.Deserialize<TaskInformationalModel>(skillRecord.Task);
             return taskInformationalModel;
         }
         #endregion

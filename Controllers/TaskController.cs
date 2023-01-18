@@ -16,7 +16,7 @@
 
         #region CRUD operations
         [HttpPost("Create Task")]
-        public async Task<IActionResult> CreateSkillAsync([FromForm] TaskInformationalModel taskEntry, SkillName skillName)
+        public async Task<IActionResult> CreateTaskAsync([FromForm] TaskInformationalModel taskEntry, SkillName skillName)
         {
             try
             {
@@ -72,7 +72,7 @@
         }
 
         [HttpGet("Get All Tasks")]
-        public async Task<IActionResult> GetAllSkillsAsync()
+        public async Task<IActionResult> GetAllTasksAsync()
         {
             try
             {
