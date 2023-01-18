@@ -6,5 +6,6 @@
         Task<TaskInformationalModel> GetTaskByIdAsync(Guid skillId, Guid taskId);
         Task<List<TaskInformationalModel>> GetAllTasksAsync();
         Task UpdateTaskAsync(TaskModel taskModel, Guid skillId);
+        Task DeleteTaskAsync(Guid skillId, Guid taskId);
     }
 }

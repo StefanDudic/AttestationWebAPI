@@ -1,4 +1,6 @@
-﻿namespace AttestationProject.Services
+﻿using System.Threading.Tasks;
+
+namespace AttestationProject.Services
 {
     public class TaskService : ITaskService
     {
@@ -81,7 +83,7 @@
             List<SkillRecord> response = await Mapper.CreateSkillListFromQueryResponse(await _skillRepository.GetAllSkillsAsync());
             if (response.Count == 0)
             {
-                throw new HttpRequestException("Skill not found.", null, HttpStatusCode.NotFound);
+                throw new HttpRequestException("Task not found.", null, HttpStatusCode.NotFound);
             }
             foreach (SkillRecord skillRecord in response)
             {
@@ -95,7 +97,7 @@
             // Checking if task exists before the update
             List<SkillRecord> existCheck = await Mapper.CreateSkillListFromQueryResponse(await _skillRepository.GetSkillByIdAsync(skillId.ToString() + "_" + task.Id.ToString()));
             if (existCheck.Count == 0)
-                throw new HttpRequestException("Skill not found.", null, HttpStatusCode.NotFound);
+                throw new HttpRequestException("Task not found.", null, HttpStatusCode.NotFound);
 
             SkillRecord skillRecordToUpdate = existCheck.First<SkillRecord>();
             // Updating task information for the passed task id by editing the JSON string to change the values
@@ -111,8 +113,30 @@
             // Need to add Task valudation after it has been implemented
             await _skillRepository.UpdateSkillAsync(skillRecordToUpdate);
         }
+        public async Task DeleteTaskAsync(Guid skillId, Guid taskId)
+        {
+            // Checking if task exists
+            List<SkillRecord> taskRecordToDelete = await Mapper.CreateSkillListFromQueryResponse(await _skillRepository.GetSkillByIdAsync(skillId.ToString() + "_" + taskId.ToString()));
+            if(taskRecordToDelete.Count == 0)
+            {
+                throw new HttpRequestException(_validatonDictionary.Errors(), null, HttpStatusCode.NotFound);
+            }
+            // Checking if we are deleting the last task entry, if so we need to leave the skill entry in the Table storage without a task
+            List<SkillRecord> response = await Mapper.CreateSkillListFromQueryResponse(await _skillRepository.GetSkillByIdAsync(skillId.ToString()));
+            if (response.Count > 1)
+            {
+                await _skillRepository.DeleteSkillAsync(taskRecordToDelete);
+            }
+            else {
+                await _skillRepository.DeleteSkillAsync(taskRecordToDelete);
+                taskRecordToDelete[0].Task = null;
+                taskRecordToDelete[0].RowKey = skillId.ToString();
+                await _skillRepository.CreateSkillAsync(taskRecordToDelete.First());
+            }
+        }
+
+        #endregion
     }
-
-    #endregion
-
 }
+
+

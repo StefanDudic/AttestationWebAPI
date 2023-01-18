@@ -106,7 +106,7 @@
             {
                 await _service.UpdateTaskAsync(taskEntry, skillId);
 
-                return Ok("Skill successfully updated.");
+                return Ok("Task successfully updated.");
             }
             catch (HttpRequestException ex)
             {
@@ -123,6 +123,40 @@
             }
             catch (Exception ex)
             {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpDelete("Delete Task")]
+        public async Task<IActionResult> DeleteSkillAsync([Required]Guid skillId,[Required]Guid taskId)
+        {
+            try
+            {
+                await _service.DeleteTaskAsync(skillId, taskId);
+
+                return Ok("Task successfully deleted.");
+            }
+            catch (HttpRequestException ex)
+            {
+                HttpStatusCode statusCode;
+                if (ex.StatusCode.HasValue)
+                {
+                    statusCode = ex.StatusCode.Value;
+                }
+                else
+                {
+                    statusCode = HttpStatusCode.InternalServerError;
+                }
+                return StatusCode((int)statusCode, "Task entry not found.");
+            }
+            catch (Exception ex)
+            {
+                HttpStatusCode statusCode;
+                if (ex.Message == "Sequence contains no elements")
+                {
+                    statusCode = HttpStatusCode.NotFound;
+                    return StatusCode((int)statusCode, "Task entry not found.");
+                }
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
