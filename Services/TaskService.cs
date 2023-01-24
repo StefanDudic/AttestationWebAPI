@@ -106,15 +106,16 @@ namespace AttestationProject.Services
             SkillRecord skillRecordToUpdate = existCheck.First<SkillRecord>();
             // Updating task information for the passed task id by editing the JSON string to change the values
             SkillInformationalModel skillModelToUpdate = Mapper.SkillRecordToInformationalModel(skillRecordToUpdate);
+            StringBuilder taskUpdated = new StringBuilder(skillRecordToUpdate.Task);
             if (task.Title != "" && task.Title is not null)
-                skillRecordToUpdate.Task = skillRecordToUpdate.Task.Replace("\"Title\":\"" + skillModelToUpdate.Tasks[0].Title, "\"Title\":\"" + task.Title);
+                taskUpdated.Replace("\"Title\":\"" + skillModelToUpdate.Tasks[0].Title, "\"Title\":\"" + task.Title);
             if (task.Level is not null)
-                skillRecordToUpdate.Task = skillRecordToUpdate.Task.Replace("\"Level\":\"" + skillModelToUpdate.Tasks[0].Level.ToString(), "\"Level\":\"" + task.Level.ToString());
+                taskUpdated.Replace("\"Level\":\"" + skillModelToUpdate.Tasks[0].Level.ToString(), "\"Level\":\"" + task.Level.ToString());
             if (task.Description is not null)
-                skillRecordToUpdate.Task = skillRecordToUpdate.Task.Replace("\"Description\":\"" + skillModelToUpdate.Tasks[0].Description, "\"Description\":\"" + task.Description);
+                taskUpdated.Replace("\"Description\":\"" + skillModelToUpdate.Tasks[0].Description, "\"Description\":\"" + task.Description);
             if (task.Code is not null)
-                skillRecordToUpdate.Task = skillRecordToUpdate.Task.Replace("\"Code\":\"" + skillModelToUpdate.Tasks[0].Code, "\"Code\":\"" + task.Code);
-            // Need to add Task valudation after it has been implemented
+                taskUpdated.Replace("\"Code\":\"" + skillModelToUpdate.Tasks[0].Code, "\"Code\":\"" + task.Code);
+            skillRecordToUpdate.Task = taskUpdated.ToString();
             await _skillRepository.UpdateSkillAsync(skillRecordToUpdate);
         }
         public async Task DeleteTaskAsync(Guid skillId, Guid taskId)
