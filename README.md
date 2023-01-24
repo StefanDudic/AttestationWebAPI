@@ -1,7 +1,6 @@
 # Attestation Web API project
 
-## The first release of the Web API project
-The first release of the Web API project provides the ability to easily perform CRUD operations for Candidate and Skill entities stored in Microsoft Azure Table Storage, following the REST design principles. The project is implemented by following a repository-service pattern and asynchronous methods for storage operations.
+This release of the Web API project provides the ability to easily perform CRUD operations for Candidate, Skill and Task entities stored in Microsoft Azure Table Storage, following the REST design principles. The project is implemented by following a repository-service pattern and asynchronous methods for storage operations.
 
 ## Canidate
 ### The Candidate entity contains the following properties:
@@ -63,12 +62,24 @@ Task
   - Description,
   - Code
 ```
-_CRUD functionality needs to be implemented in later release_
+### Following is the list of methods used to provide CRUD functionality:
+ - **CreateTaskAsync()** -  _Create a task entity in the Azure Table Storage with provided set of values_
+ - **GetTaskByIdAsync()** - _Retrieve a task from the Azure Table Storage by passing an Id of the task and an Id of the skill this task belongs to as an identifier_
+ - **GetAllTasksAsync()** - _Retrieves all task entries from the Azure Table Storage_
+ - **UpdateTaskAsync()** - _Updates task entry in the Azure Table Storage by passing an Id of the task and an Id of the skill this task belongs to as an identifier and the set of values to update for the task_
+ - **DeleteTaskAsync()** - _Deletes the task entry in the Azure Table Storage by passing an Id of the task and an Id of the skill this task belongs to as anidentifier_
+
+#### Additional notes on the method implementation for Skill:
+- Id is generated automatically during the entity creation in a form of a generated GUID.
+- All methods contain validation logic to ensure consistent and reliable data storage.
+- Skill has to exist in the table in order to append a task to it. 
+- Each task is stored as a sperate row in the table.
+- If we delete the last task entry for the specific skill we need to keep the skill information in the table. New row containing the skill information is created for that purpose.
 
 ## Technologies used for the implementation
 - .Net Core
 - Azure Table Storage
 
 ## Tasks for the future releases 
-- [ ] Implement CRUD functionality for Task entities
+- [x] Implement CRUD functionality for Task entities
 - [ ] Implement authentication logic via JWT
